@@ -3,7 +3,17 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({Key key}) : super(key: key);
+  AuthForm(this.submitFn, this.isLoading);
+
+  final bool isLoading;
+
+  final void Function(
+    String email,
+    String passwoword,
+    String username,
+    bool isLogin,
+    BuildContext ctx,
+  ) submitFn;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -17,13 +27,19 @@ class _AuthFormState extends State<AuthForm> {
   var _userPassword = '';
 
   void _trySumbit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
 
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      _formKey.currentState.save();
-      print(_userEmail);
+      _formKey.currentState!.save();
+      widget.submitFn(
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName.trim(),
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -43,7 +59,7 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
+                      if (value!.isEmpty || !value.contains('@')) {
                         return 'Please enter a valid email address!';
                       }
                       return null;
@@ -53,30 +69,29 @@ class _AuthFormState extends State<AuthForm> {
                       labelText: 'Email Address',
                     ),
                     onSaved: (value) {
-                      _userEmail = value;
+                      _userEmail = value!;
                     },
                   ),
-                   if(!_isLogin)
-                  TextFormField(
+                  if (!_isLogin)
+                    TextFormField(
                       key: ValueKey('username'),
-                    validator: (value) {
-                      if (value.isEmpty || value.length < 4) {
-                        return 'Please enter at least 4 characters!';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Username',
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 4) {
+                          return 'Please enter at least 4 characters!';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      onSaved: (value) {
+                        _userName = value!;
+                      },
                     ),
-                    onSaved: (value) {
-                      _userName = value;
-                    },
-                  ),
-                
                   TextFormField(
-                      key: ValueKey('password'),
+                    key: ValueKey('password'),
                     validator: (value) {
-                      if (value.isEmpty || value.length < 7) {
+                      if (value!.isEmpty || value.length < 7) {
                         return 'Password must be at least 7 characters long!';
                       }
                       return null;
@@ -86,26 +101,29 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     obscureText: true,
                     onSaved: (value) {
-                      _userPassword = value;
+                      _userPassword = value!;
                     },
                   ),
                   SizedBox(
                     height: 12,
                   ),
-                  ElevatedButton(
-                    onPressed: _trySumbit,
-                    child: Text(_isLogin ? 'Login' : 'Signup'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                      });
-                    },
-                    child: Text(_isLogin
-                        ? 'Create new account'
-                        : 'I already have an account'),
-                  ),
+                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (!widget.isLoading)
+                    ElevatedButton(
+                      onPressed: _trySumbit,
+                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                    ),
+                  if (!widget.isLoading)
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLogin = !_isLogin;
+                        });
+                      },
+                      child: Text(_isLogin
+                          ? 'Create new account'
+                          : 'I already have an account'),
+                    ),
                 ],
               ),
             ),
