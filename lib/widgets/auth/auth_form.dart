@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:io';
 
 import 'package:chat_app/widgets/pickers/user_image_picker.dart';
@@ -44,7 +42,7 @@ class _AuthFormState extends State<AuthForm> {
     if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please pick an image.'),
+          content: const Text('Please pick an image.'),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
@@ -68,10 +66,10 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(
@@ -79,7 +77,7 @@ class _AuthFormState extends State<AuthForm> {
                 children: [
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   TextFormField(
-                    key: ValueKey('email'),
+                    key: const ValueKey('email'),
                     autocorrect: false,
                     textCapitalization: TextCapitalization.none,
                     enableSuggestions: false,
@@ -90,7 +88,7 @@ class _AuthFormState extends State<AuthForm> {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email Address',
                     ),
                     onSaved: (value) {
@@ -99,7 +97,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (!_isLogin)
                     TextFormField(
-                      key: ValueKey('username'),
+                      key: const ValueKey('username'),
                       autocorrect: true,
                       textCapitalization: TextCapitalization.words,
                       enableSuggestions: false,
@@ -109,7 +107,7 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Username',
                       ),
                       onSaved: (value) {
@@ -117,14 +115,14 @@ class _AuthFormState extends State<AuthForm> {
                       },
                     ),
                   TextFormField(
-                    key: ValueKey('password'),
+                    key: const ValueKey('password'),
                     validator: (value) {
                       if (value!.isEmpty || value.length < 7) {
                         return 'Password must be at least 7 characters long!';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Password',
                     ),
                     obscureText: true,
@@ -132,10 +130,10 @@ class _AuthFormState extends State<AuthForm> {
                       _userPassword = value!;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
                     ElevatedButton(
                       onPressed: _trySumbit,
