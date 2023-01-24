@@ -1,15 +1,18 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble(
+  const MessageBubble(
     this.message,
     this.username,
     this.userImage,
     this.isMe, {
-    required this.key,
+    super.key,
+    required this.mkey,
   });
 
-  final Key key;
+  final Key mkey;
   final String message;
   final String username;
   final String userImage;
@@ -26,7 +29,9 @@ class MessageBubble extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
+                color: isMe
+                    ? Color.fromARGB(255, 236, 69, 35)
+                    : Theme.of(context).accentColor,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(12),
                   topRight: const Radius.circular(12),
@@ -56,7 +61,7 @@ class MessageBubble extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isMe
-                          ? Colors.black
+                          ? Colors.white
                           : Theme.of(context).accentTextTheme.headline1!.color,
                     ),
                   ),
@@ -64,7 +69,7 @@ class MessageBubble extends StatelessWidget {
                     message,
                     style: TextStyle(
                       color: isMe
-                          ? Colors.black
+                          ? Colors.white
                           : Theme.of(context).accentTextTheme.headline1!.color,
                     ),
                     textAlign: isMe ? TextAlign.end : TextAlign.start,

@@ -5,21 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  @override
   void initState() {
     super.initState();
     final fbm = FirebaseMessaging.instance;
     fbm.requestPermission();
     FirebaseMessaging.onMessage.listen((message) {
-      print(message);
+      debugPrint(message as String?);
       return;
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print(message);
+      debugPrint(message as String?);
       return;
     });
     fbm.subscribeToTopic('chat');
@@ -33,9 +36,9 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           DropdownButton(
             underline: Container(),
-            icon: Icon(
+            icon: const Icon(
               Icons.more_vert,
-              color: Theme.of(context).colorScheme.secondary,
+              color: Colors.black,
             ),
             items: [
               DropdownMenuItem(
@@ -43,21 +46,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 onTap: () {
                   FirebaseAuth.instance.signOut();
                 },
-                child: Container(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.exit_to_app,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      const Text(
-                        'Logout',
-                      ),
-                    ],
-                  ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      'Logout',
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -69,15 +70,14 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: const [
-            Expanded(
-              child: Messages(),
-            ),
-            NewMessage(),
-          ],
-        ),
+      backgroundColor: const Color.fromARGB(255, 234, 255, 252),
+      body: Column(
+        children: const [
+          Expanded(
+            child: Messages(),
+          ),
+          NewMessage(),
+        ],
       ),
     );
   }
